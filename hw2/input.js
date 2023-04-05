@@ -18,13 +18,17 @@ var isFollowMode = false;
 var isFollowModeEnd = false;
 var isChangingSize = false;
 var isWaitingAllFingersLeave = false;
+var isChangingHorizon;
 var movingDiv;
 var firstTouchTime;
 var secondTouchTime;
-var originFingerWidth;
+var originFinger;
 var originDivWidth;
 var originLeft;
+var originDivHeight;
+var originTop;
 const minWidth = 50;
+const minHeight = 50;
 
 function removeClassName(cn) {
     for (let i = 0; i < allTarget.length; i++) {
@@ -141,6 +145,8 @@ document.addEventListener("keyup", (e) => {
         if (selectedDiv !== undefined) {
             selectedDiv.style.left = originLeft + 'px';
             selectedDiv.style.width = originDivWidth + 'px';
+            selectedDiv.style.top = originTop + 'px';
+            selectedDiv.style.height = originDivHeight + 'px';
         }
 
         if (movingDiv !== undefined) {
@@ -173,13 +179,25 @@ grayPart.addEventListener("touchstart",
                     let selectedDiv = document.getElementsByClassName('selected')[0];
                     originDivWidth = parseInt(selectedDiv.style.width.replace("px", ""));
                     originLeft = parseInt(selectedDiv.style.left.replace("px", ""));
+                    originDivHeight = parseInt(selectedDiv.style.height.replace("px", ""));
+                    originTop = parseInt(selectedDiv.style.top.replace("px", ""));
                     if (selectedDiv !== undefined) {
-                        originFingerWidth = Math.abs(e.touches[0].clientX - e.touches[1].clientX);
+                        let horizontal = Math.abs(e.touches[0].clientX - e.touches[1].clientX);
+                        let vertical = Math.abs(e.touches[0].clientY - e.touches[1].clientY);
+                        if (horizontal > vertical) {
+                            originFinger = horizontal;
+                            isChangingHorizon = true;
+                        }
+                        else {
+                            originFinger = vertical;
+                            isChangingHorizon = false;
+                        }
+
                         isChangingSize = true;
-                        console.log('originFingerWidth: ' + originFingerWidth);
+                        console.log('originFingerWidth: ' + originFinger);
                         console.log('originLeft: ' + originLeft);
-                        console.log('e.touches[0].clientX: ' + e.touches[0].clientX +
-                            '\ne.touches[1].clientX: ' + e.touches[1].clientX);
+                        //console.log('e.touches[0].clientX: ' + e.touches[0].clientX +
+                        //   '\ne.touches[1].clientX: ' + e.touches[1].clientX);
                     }
                 }
                 else {
@@ -202,6 +220,8 @@ grayPart.addEventListener("touchstart",
                 if (selectedDiv !== undefined) {
                     selectedDiv.style.left = originLeft + 'px';
                     selectedDiv.style.width = originDivWidth + 'px';
+                    selectedDiv.style.top = originTop + 'px';
+                    selectedDiv.style.height = originDivHeight + 'px';
                 }
 
                 if (movingDiv !== undefined) {
@@ -250,12 +270,21 @@ grayPart.addEventListener('touchmove',
         if (isChangingSize && event.touches.length === 2 && !isWaitingAllFingersLeave) {
             let selectedDiv = document.getElementsByClassName('selected')[0];
             //console.log('selec width: ' + originDivWidth);
-            console.log('m e.touches[0].clientX: ' + event.touches[0].clientX +
-                '\nm e.touches[1].clientX: ' + event.touches[1].clientX);
-            let fingerOffset = Math.abs(event.touches[0].clientX - event.touches[1].clientX);
-            console.log("new l: " + (originLeft - (originDivWidth + fingerOffset - originFingerWidth) / 2));
-            console.log('new w: ' + (originDivWidth + fingerOffset - originFingerWidth));
-            selectedDiv.style.left = (originLeft + (originDivWidth - Math.max(minWidth, ((originDivWidth + fingerOffset - originFingerWidth)))) / 2) + 'px';
-            selectedDiv.style.width = Math.max(minWidth, ((originDivWidth + fingerOffset - originFingerWidth))) + 'px';
+            //console.log('m e.touches[0].clientX: ' + event.touches[0].clientX +
+            //    '\nm e.touches[1].clientX: ' + event.touches[1].clientX);
+            if (isChangingHorizon) {
+                let fingerOffset = Math.abs(event.touches[0].clientX - event.touches[1].clientX);
+                //console.log("new l: " + (originLeft - (originDivWidth + fingerOffset - originFinger) / 2));
+                //console.log('new w: ' + (originDivWidth + fingerOffset - originFinger));
+                selectedDiv.style.left = (originLeft + (originDivWidth - Math.max(minWidth, (originDivWidth + fingerOffset - originFinger))) / 2) + 'px';
+                selectedDiv.style.width = Math.max(minWidth, (originDivWidth + fingerOffset - originFinger)) + 'px';
+            }
+            else {
+                let fingerOffset = Math.abs(event.touches[0].clientY - event.touches[1].clientY);
+                //console.log("new t: " + (originLeft - (originDivWidth + fingerOffset - originFinger) / 2));
+                //console.log('new h: ' + (originDivHeight + fingerOffset - originFinger));
+                selectedDiv.style.top = (originTop + (originDivHeight - Math.max(minHeight, (originDivHeight + fingerOffset - originFinger))) / 2) + 'px';
+                selectedDiv.style.height = Math.max(minHeight, (originDivHeight + fingerOffset - originFinger)) + 'px';
+            }
         }
     }, false);
