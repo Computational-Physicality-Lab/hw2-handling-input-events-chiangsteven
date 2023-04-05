@@ -21,6 +21,7 @@ var movingDiv;
 var firstTouchTime;
 var secondTouchTime;
 var originFingerWidth;
+var originDivWidth;
 
 function removeClassName(cn) {
     for (let i = 0; i < allTarget.length; i++) {
@@ -154,6 +155,7 @@ grayPart.addEventListener("touchstart",
             if (secondTouchTime - firstTouchTime <= 100) {
                 console.log('two-finger touched');
                 let selectedDiv = document.getElementsByClassName('selected')[0];
+                originDivWidth = selectedDiv.style.width.replace("px", "");
                 if (selectedDiv !== undefined) {
                     originFingerWidth = Math.abs(e.touches[0].clientX - e.touches[1].clientX);
                     isChangingSize = true;
@@ -189,6 +191,9 @@ grayPart.addEventListener("touchstart",
 grayPart.addEventListener('touchend',
     function (e) {
         console.log("gray touch end, touches count:" + " " + e.touches.length);
+        if (e.touches.length === 0) {
+            isChangingSize = false;
+        }
         if (isFollowMode) {
             console.log("isFollowMode in gray touch end");
         }
@@ -213,11 +218,11 @@ grayPart.addEventListener('touchmove',
             movingDiv.style.left = (mousePosition.x + offset[0]) + 'px';
             movingDiv.style.top = (mousePosition.y + offset[1]) + 'px';
         }
-        if (isChangingSize) {
+        if (isChangingSize && event.touches.length === 2) {
             let selectedDiv = document.getElementsByClassName('selected')[0];
-            console.log('selec width: ' + selectedDiv.style.width);
-            console.log('m e.touches[0].clientX: ' + event.touches[0].clientX +
-                'm e.touches[1].clientX: ' + event.touches[1].clientX);
-            //selectedDiv.style.width *= (Math.abs(event.touches[0].clientX - event.touches[1].clientX) - originFingerWidth) / originFingerWidth;
+            //console.log('selec width: ' + selectedDiv.style.width);
+            //console.log('m e.touches[0].clientX: ' + event.touches[0].clientX +
+            //    'm e.touches[1].clientX: ' + event.touches[1].clientX);
+            selectedDiv.style.width = ((Math.abs(event.touches[0].clientX - event.touches[1].clientX) - originFingerWidth) + originDivWidth) + 'px';
         }
     }, false);
