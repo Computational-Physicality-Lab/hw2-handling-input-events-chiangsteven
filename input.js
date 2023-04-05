@@ -226,7 +226,10 @@ grayPart.addEventListener('touchmove',
             //console.log('selec width: ' + originDivWidth);
             console.log('m e.touches[0].clientX: ' + event.touches[0].clientX +
                 '\nm e.touches[1].clientX: ' + event.touches[1].clientX);
-            selectedDiv.style.left = (originLeft - (originDivWidth + (Math.abs(event.touches[0].clientX - event.touches[1].clientX) - originFingerWidth)) / 2) + 'px';
+            let fingerOffset = Math.abs(event.touches[0].clientX - event.touches[1].clientX);
+            console.log("fingerOffset: " + fingerOffset);
+            console.log('new w: ' + (originDivWidth + (Math.abs(event.touches[0].clientX - event.touches[1].clientX) - originFingerWidth)));
+            //  selectedDiv.style.left = (originLeft - (originDivWidth + (Math.abs(event.touches[0].clientX - event.touches[1].clientX) - originFingerWidth)) / 2) + 'px';
             selectedDiv.style.width = (originDivWidth + (Math.abs(event.touches[0].clientX - event.touches[1].clientX) - originFingerWidth)) + 'px';
         }
     }, false);
