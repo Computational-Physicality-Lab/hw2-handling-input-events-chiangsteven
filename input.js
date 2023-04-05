@@ -135,8 +135,18 @@ grayPart.addEventListener('mousemove',
 
 document.addEventListener("keyup", (e) => {
     if (e.code === "Escape" && isDown) {
-        movingDiv.style.left = (originPosition.x + offset[0]) + 'px';
-        movingDiv.style.top = (originPosition.y + offset[1]) + 'px';
+        isChangingSize = false;
+        isWaitingAllFingersLeave = true;
+        let selectedDiv = document.getElementsByClassName('selected')[0];
+        if (selectedDiv !== undefined) {
+            selectedDiv.style.left = originLeft + 'px';
+            selectedDiv.style.width = originDivWidth + 'px';
+        }
+
+        if (movingDiv !== undefined) {
+            movingDiv.style.left = (originPosition.x + offset[0]) + 'px';
+            movingDiv.style.top = (originPosition.y + offset[1]) + 'px';
+        }
         isDown = false;
         movingDiv = undefined;
     }
