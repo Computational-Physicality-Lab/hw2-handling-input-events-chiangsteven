@@ -81,7 +81,7 @@ for (let i = 0; i < allTarget.length; i++) {
             console.log("div mouse up set True");
         }
     }, false);
-    div.addEventListener('dblclick', function () {
+    div.addEventListener('dblclick', function (e) {
         console.log("double click");
         isDown = true;
         isFollowMode = true;
