@@ -17,6 +17,7 @@ var isDown = false;
 var isFollowMode = false;
 var isFollowModeEnd = false;
 var isChangingSize = false;
+var isWaitingAllFingersLeave = false;
 var movingDiv;
 var firstTouchTime;
 var secondTouchTime;
@@ -144,34 +145,54 @@ document.addEventListener("keyup", (e) => {
 
 grayPart.addEventListener("touchstart",
     (e) => {
-        if (e.touches.length === 1) {
-            originPosition = {
-                x: e.touches[0].clientX,
-                y: e.touches[0].clientY
-            };
-            firstTouchTime = e.timeStamp;
-            //console.log('1st: ' + firstTouchTime);
-        }
-        else if (e.touches.length === 2) {
-            secondTouchTime = e.timeStamp;
-            console.log('1st: ' + firstTouchTime);
-            console.log('2nd: ' + secondTouchTime);
-            if (secondTouchTime - firstTouchTime <= 100 || isChangingSize) {
-                console.log('two-finger touched');
-                let selectedDiv = document.getElementsByClassName('selected')[0];
-                originDivWidth = parseInt(selectedDiv.style.width.replace("px", ""));
-                originLeft = parseInt(selectedDiv.style.left.replace("px", ""));
-                if (selectedDiv !== undefined) {
-                    originFingerWidth = Math.abs(e.touches[0].clientX - e.touches[1].clientX);
-                    isChangingSize = true;
-                    console.log('originFingerWidth: ' + originFingerWidth);
-                    console.log('originLeft: ' + originLeft);
-                    console.log('e.touches[0].clientX: ' + e.touches[0].clientX +
-                        '\ne.touches[1].clientX: ' + e.touches[1].clientX);
+        if (!isWaitingAllFingersLeave) {
+            if (e.touches.length === 1) {
+                originPosition = {
+                    x: e.touches[0].clientX,
+                    y: e.touches[0].clientY
+                };
+                firstTouchTime = e.timeStamp;
+                //console.log('1st: ' + firstTouchTime);
+            }
+            else if (e.touches.length === 2) {
+                secondTouchTime = e.timeStamp;
+                console.log('1st: ' + firstTouchTime);
+                console.log('2nd: ' + secondTouchTime);
+                if (secondTouchTime - firstTouchTime <= 100 || isChangingSize) {
+                    console.log('two-finger touched');
+                    let selectedDiv = document.getElementsByClassName('selected')[0];
+                    originDivWidth = parseInt(selectedDiv.style.width.replace("px", ""));
+                    originLeft = parseInt(selectedDiv.style.left.replace("px", ""));
+                    if (selectedDiv !== undefined) {
+                        originFingerWidth = Math.abs(e.touches[0].clientX - e.touches[1].clientX);
+                        isChangingSize = true;
+                        console.log('originFingerWidth: ' + originFingerWidth);
+                        console.log('originLeft: ' + originLeft);
+                        console.log('e.touches[0].clientX: ' + e.touches[0].clientX +
+                            '\ne.touches[1].clientX: ' + e.touches[1].clientX);
+                    }
                 }
+                else {
+                    console.log('abort');
+                    if (movingDiv !== undefined) {
+                        movingDiv.style.left = (originPosition.x + offset[0]) + 'px';
+                        movingDiv.style.top = (originPosition.y + offset[1]) + 'px';
+                    }
+                    isDown = false;
+                    movingDiv = undefined;
+                }
+
             }
             else {
                 console.log('abort');
+                isChangingSize = false;
+                isWaitingAllFingersLeave = true;
+                let selectedDiv = document.getElementsByClassName('selected')[0];
+                if (selectedDiv !== undefined) {
+                    selectedDiv.style.left = originLeft + 'px';
+                    selectedDiv.style.width = originDivWidth + 'px';
+                }
+
                 if (movingDiv !== undefined) {
                     movingDiv.style.left = (originPosition.x + offset[0]) + 'px';
                     movingDiv.style.top = (originPosition.y + offset[1]) + 'px';
@@ -179,16 +200,6 @@ grayPart.addEventListener("touchstart",
                 isDown = false;
                 movingDiv = undefined;
             }
-
-        }
-        else {
-            console.log('abort');
-            if (movingDiv !== undefined) {
-                movingDiv.style.left = (originPosition.x + offset[0]) + 'px';
-                movingDiv.style.top = (originPosition.y + offset[1]) + 'px';
-            }
-            isDown = false;
-            movingDiv = undefined;
         }
         console.log("gray touch start");
     }, false);
@@ -199,6 +210,7 @@ grayPart.addEventListener('touchend',
         console.log("gray touch end, touches count:" + " " + e.touches.length);
         if (e.touches.length === 0) {
             isChangingSize = false;
+            isWaitingAllFingersLeave = false;
         }
         else if ((e.touches.length === 1) && isChangingSize) {
 
@@ -217,7 +229,7 @@ grayPart.addEventListener('touchmove',
     function (event) {
         event.preventDefault();
         console.log("touch mmm");
-        if ((event.touches.length === 1) && isDown) {
+        if ((event.touches.length === 1) && isDown && !isWaitingAllFingersLeave) {
             mousePosition = {
 
                 x: event.touches[0].clientX,
@@ -227,7 +239,7 @@ grayPart.addEventListener('touchmove',
             movingDiv.style.left = (mousePosition.x + offset[0]) + 'px';
             movingDiv.style.top = (mousePosition.y + offset[1]) + 'px';
         }
-        if (isChangingSize && event.touches.length === 2) {
+        if (isChangingSize && event.touches.length === 2 && !isWaitingAllFingersLeave) {
             let selectedDiv = document.getElementsByClassName('selected')[0];
             //console.log('selec width: ' + originDivWidth);
             console.log('m e.touches[0].clientX: ' + event.touches[0].clientX +
