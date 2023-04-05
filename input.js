@@ -154,11 +154,11 @@ grayPart.addEventListener("touchstart",
             secondTouchTime = e.timeStamp;
             console.log('1st: ' + firstTouchTime);
             console.log('2nd: ' + secondTouchTime);
-            if (secondTouchTime - firstTouchTime <= 100) {
+            if (secondTouchTime - firstTouchTime <= 100 || isChangingSize) {
                 console.log('two-finger touched');
                 let selectedDiv = document.getElementsByClassName('selected')[0];
                 originDivWidth = parseInt(selectedDiv.style.width.replace("px", ""));
-                originLeft = parseInt(selectedDiv.style.offsetLeft);
+                originLeft = parseInt(selectedDiv.style.left.replace("px", ""));
                 if (selectedDiv !== undefined) {
                     originFingerWidth = Math.abs(e.touches[0].clientX - e.touches[1].clientX);
                     isChangingSize = true;
@@ -197,6 +197,9 @@ grayPart.addEventListener('touchend',
         console.log("gray touch end, touches count:" + " " + e.touches.length);
         if (e.touches.length === 0) {
             isChangingSize = false;
+        }
+        else if ((e.touches.length === 1) && isChangingSize) {
+
         }
         if (isFollowMode) {
             console.log("isFollowMode in gray touch end");
