@@ -233,7 +233,7 @@ grayPart.addEventListener('touchmove',
             let fingerOffset = Math.abs(event.touches[0].clientX - event.touches[1].clientX);
             console.log("new l: " + (originLeft - (originDivWidth + fingerOffset - originFingerWidth) / 2));
             console.log('new w: ' + (originDivWidth + fingerOffset - originFingerWidth));
-            selectedDiv.style.left = (originLeft - (originDivWidth + fingerOffset - originFingerWidth) / 2) + 'px';
+            selectedDiv.style.left = (originLeft + (fingerOffset - originFingerWidth) / 2) + 'px';
             selectedDiv.style.width = Math.max(minWidth, ((originDivWidth + fingerOffset - originFingerWidth))) + 'px';
         }
     }, false);
