@@ -146,13 +146,17 @@ grayPart.addEventListener("touchstart",
         }
         else if (e.touches.length === 2) {
             secondTouch = e.touches[1];
-            if (secondTouch.timeStamp - firstTouch.timeStamp <= 200) {
+            console.log('1st: ' + firstTouch.timeStamp);
+            console.log('2nd: ' + secondTouch.timeStamp);
+            if (secondTouch.timeStamp - firstTouch.timeStamp <= 1000) {
                 console.log('two-finger touched');
             }
             else {
                 console.log('abort');
-                movingDiv.style.left = (originPosition.x + offset[0]) + 'px';
-                movingDiv.style.top = (originPosition.y + offset[1]) + 'px';
+                if (movingDiv !== undefined) {
+                    movingDiv.style.left = (originPosition.x + offset[0]) + 'px';
+                    movingDiv.style.top = (originPosition.y + offset[1]) + 'px';
+                }
                 isDown = false;
                 movingDiv = undefined;
             }
