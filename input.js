@@ -17,8 +17,8 @@ var isDown = false;
 var isFollowMode = false;
 var isFollowModeEnd = false;
 var movingDiv;
-var firstTouch;
-var secondTouch;
+var firstTouchTime;
+var secondTouchTime;
 
 function removeClassName(cn) {
     for (let i = 0; i < allTarget.length; i++) {
@@ -142,13 +142,14 @@ grayPart.addEventListener("touchstart",
                 x: e.touches[0].clientX,
                 y: e.touches[0].clientY
             };
-            firstTouch = e.touches[0];
+            firstTouchTime = e.timeStamp;
+            //console.log('1st: ' + firstTouchTime);
         }
         else if (e.touches.length === 2) {
-            secondTouch = e.touches[1];
-            console.log('1st: ' + firstTouch.timeStamp);
-            console.log('2nd: ' + secondTouch.timeStamp);
-            if (secondTouch.timeStamp - firstTouch.timeStamp <= 1000) {
+            secondTouchTime = e.timeStamp;
+            console.log('1st: ' + firstTouchTime);
+            console.log('2nd: ' + secondTouchTime);
+            if (secondTouchTime - firstTouchTime <= 200) {
                 console.log('two-finger touched');
             }
             else {
