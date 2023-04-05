@@ -146,7 +146,7 @@ grayPart.addEventListener("touchstart",
 
 grayPart.addEventListener('touchend',
     function () {
-        console.log("gray touch end");
+        console.log("gray touch end" + " " + isFollowMode);
         if (isFollowMode) {
             console.log("isFollowMode in gray touch end");
         }
