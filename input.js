@@ -84,16 +84,18 @@ for (let i = 0; i < allTarget.length; i++) {
     }, false);
     div.addEventListener('touchstart', function (e) {
         console.log("div touch start");
-        isDown = true;
-        offset = [
-            div.offsetLeft - e.touches[0].clientX,
-            div.offsetTop - e.touches[0].clientY
-        ];
-        originPosition = {
-            x: e.touches[0].clientX,
-            y: e.touches[0].clientY
-        };
-        movingDiv = this;
+        if (e.touches.length === 1) {
+            isDown = true;
+            offset = [
+                div.offsetLeft - e.touches[0].clientX,
+                div.offsetTop - e.touches[0].clientY
+            ];
+            originPosition = {
+                x: e.touches[0].clientX,
+                y: e.touches[0].clientY
+            };
+            movingDiv = this;
+        }
     }, false);
 }
 
@@ -215,7 +217,7 @@ grayPart.addEventListener('touchmove',
     function (event) {
         event.preventDefault();
         console.log("touch mmm");
-        if (isDown) {
+        if ((e.touches.length === 1) && isDown) {
             mousePosition = {
 
                 x: event.touches[0].clientX,
@@ -233,7 +235,7 @@ grayPart.addEventListener('touchmove',
             let fingerOffset = Math.abs(event.touches[0].clientX - event.touches[1].clientX);
             console.log("new l: " + (originLeft - (originDivWidth + fingerOffset - originFingerWidth) / 2));
             console.log('new w: ' + (originDivWidth + fingerOffset - originFingerWidth));
-            selectedDiv.style.left = (originLeft + (originFingerWidth - fingerOffset) / 2) + 'px';
+            selectedDiv.style.left = (originLeft + (originDivWidth - Math.max(minWidth, ((originDivWidth + fingerOffset - originFingerWidth)))) / 2) + 'px';
             selectedDiv.style.width = Math.max(minWidth, ((originDivWidth + fingerOffset - originFingerWidth))) + 'px';
         }
     }, false);
