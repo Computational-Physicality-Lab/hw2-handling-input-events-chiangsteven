@@ -177,11 +177,11 @@ grayPart.addEventListener("touchstart",
                 if (secondTouchTime - firstTouchTime <= 100 || isChangingSize) {
                     console.log('two-finger touched');
                     let selectedDiv = document.getElementsByClassName('selected')[0];
-                    originDivWidth = parseInt(selectedDiv.style.width.replace("px", ""));
-                    originLeft = parseInt(selectedDiv.style.left.replace("px", ""));
-                    originDivHeight = parseInt(selectedDiv.style.height.replace("px", ""));
-                    originTop = parseInt(selectedDiv.style.top.replace("px", ""));
                     if (selectedDiv !== undefined) {
+                        originDivWidth = parseInt(selectedDiv.style.width.replace("px", ""));
+                        originLeft = parseInt(selectedDiv.style.left.replace("px", ""));
+                        originDivHeight = parseInt(selectedDiv.style.height.replace("px", ""));
+                        originTop = parseInt(selectedDiv.style.top.replace("px", ""));
                         let horizontal = Math.abs(e.touches[0].clientX - e.touches[1].clientX);
                         let vertical = Math.abs(e.touches[0].clientY - e.touches[1].clientY);
                         if (horizontal > vertical) {
