@@ -190,6 +190,7 @@ grayPart.addEventListener("touchstart",
                     }
                     isDown = false;
                     movingDiv = undefined;
+                    isFollowMode = false;
                 }
 
             }
@@ -225,10 +226,7 @@ grayPart.addEventListener('touchend',
         else if ((e.touches.length === 1) && isChangingSize) {
 
         }
-        if (isFollowMode) {
-            console.log("isFollowMode in gray touch end");
-        }
-        else {
+        if (!isFollowMode) {
             console.log("Not isFollowMode in gray touch end");
             isDown = false;
             movingDiv = undefined;
