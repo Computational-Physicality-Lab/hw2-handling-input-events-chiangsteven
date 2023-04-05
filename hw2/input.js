@@ -174,6 +174,9 @@ grayPart.addEventListener("touchstart",
                 firstTouchTime = e.timeStamp;
                 //console.log('1st: ' + firstTouchTime);
             }
+            else if (e.touches.length === 1 && isFollowMode) {
+                // avoid enter to third touch abort
+            }
             else if (e.touches.length === 2) {
                 secondTouchTime = e.timeStamp;
                 console.log('1st: ' + firstTouchTime);
