@@ -212,6 +212,6 @@ grayPart.addEventListener('touchmove',
         }
         if (isChangingSize) {
             let selectedDiv = document.getElementsByClassName('selected')[0];
-            selectedDiv.style.width *= (Math.abs(e.touches[0].clientX - e.touches[1].clientX) - originFingerWidth) / originFingerWidth;
+            selectedDiv.style.width *= (Math.abs(event.touches[0].clientX - event.touches[1].clientX) - originFingerWidth) / originFingerWidth;
         }
     }, false);
