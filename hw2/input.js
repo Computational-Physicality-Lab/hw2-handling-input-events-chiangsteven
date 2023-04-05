@@ -93,7 +93,7 @@ for (let i = 0; i < allTarget.length; i++) {
     }, false);
     div.addEventListener('touchstart', function (e) {
         console.log("div touch start");
-        if (e.touches.length === 1) {
+        if (e.touches.length === 1 && !isFollowMode) {
             isDown = true;
             offset = [
                 div.offsetLeft - e.touches[0].clientX,
