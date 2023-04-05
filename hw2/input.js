@@ -86,7 +86,10 @@ for (let i = 0; i < allTarget.length; i++) {
         isDown = true;
         isFollowMode = true;
         movingDiv = this;
-
+        offset = [
+            div.offsetLeft - e.clientX,
+            div.offsetTop - e.clientY
+        ];
         originPosition = {
             x: e.clientX,
             y: e.clientY
