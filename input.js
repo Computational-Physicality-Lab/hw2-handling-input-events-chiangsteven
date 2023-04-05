@@ -147,8 +147,13 @@ grayPart.addEventListener("touchstart",
 grayPart.addEventListener('touchend',
     function () {
         console.log("gray touch end");
-        isDown = false;
-        movingDiv = undefined;
+        if (isFollowMode) {
+
+        }
+        else {
+            isDown = false;
+            movingDiv = undefined;
+        }
     }, false);
 
 grayPart.addEventListener('touchmove',
