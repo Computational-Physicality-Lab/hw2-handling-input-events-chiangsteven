@@ -75,7 +75,19 @@ for (let i = 0; i < allTarget.length; i++) {
         isFollowMode = true;
         movingDiv = this;
     }, false);
-
+    div.addEventListener('touchstart', function (e) {
+        console.log("div touch start");
+        isDown = true;
+        offset = [
+            div.offsetLeft - e.touches[0].clientX,
+            div.offsetTop - e.touches[0].clientY
+        ];
+        originPosition = {
+            x: e.touches[0].clientX,
+            y: e.touches[0].clientY
+        };
+        movingDiv = this;
+    }, false);
 }
 
 grayPart.addEventListener("mousedown",
@@ -119,4 +131,38 @@ document.addEventListener("keyup", (e) => {
         movingDiv = undefined;
     }
     console.log("esc");
-}, false)
+}, false);
+
+grayPart.addEventListener("touchstart",
+    (e) => {
+        if (e.touches.length === 1)
+            originPosition = {
+                x: e.touches[0].clientX,
+                y: e.touches[0].clientY
+            };
+        console.log("gray touch start");
+    }, false);
+
+
+grayPart.addEventListener('touchend',
+    function () {
+        console.log("gray touch end");
+        isDown = false;
+        movingDiv = undefined;
+    }, false);
+
+grayPart.addEventListener('touchmove',
+    function (event) {
+        event.preventDefault();
+        console.log("touch mmm");
+        if (isDown) {
+            mousePosition = {
+
+                x: event.touches[0].clientX,
+                y: event.touches[0].clientY
+
+            };
+            movingDiv.style.left = (mousePosition.x + offset[0]) + 'px';
+            movingDiv.style.top = (mousePosition.y + offset[1]) + 'px';
+        }
+    }, false);
