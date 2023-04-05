@@ -22,6 +22,7 @@ var firstTouchTime;
 var secondTouchTime;
 var originFingerWidth;
 var originDivWidth;
+var originLeft;
 
 function removeClassName(cn) {
     for (let i = 0; i < allTarget.length; i++) {
@@ -156,6 +157,7 @@ grayPart.addEventListener("touchstart",
                 console.log('two-finger touched');
                 let selectedDiv = document.getElementsByClassName('selected')[0];
                 originDivWidth = selectedDiv.style.width.replace("px", "");
+                originLeft = selectedDiv.style.offsetLeft;
                 if (selectedDiv !== undefined) {
                     originFingerWidth = Math.abs(e.touches[0].clientX - e.touches[1].clientX);
                     isChangingSize = true;
@@ -221,9 +223,10 @@ grayPart.addEventListener('touchmove',
         }
         if (isChangingSize && event.touches.length === 2) {
             let selectedDiv = document.getElementsByClassName('selected')[0];
-            console.log('selec width: ' + originDivWidth);
-            //console.log('m e.touches[0].clientX: ' + event.touches[0].clientX +
-            //    'm e.touches[1].clientX: ' + event.touches[1].clientX);
-            selectedDiv.style.width = ((Math.abs(event.touches[0].clientX - event.touches[1].clientX) - originFingerWidth) + originDivWidth) + 'px';
+            //console.log('selec width: ' + originDivWidth);
+            console.log('m e.touches[0].clientX: ' + event.touches[0].clientX +
+                '\nm e.touches[1].clientX: ' + event.touches[1].clientX);
+            selectedDiv.style.left = (originLeft - (originDivWidth + (Math.abs(event.touches[0].clientX - event.touches[1].clientX) - originFingerWidth)) / 2) + 'px';
+            selectedDiv.style.width = (originDivWidth + (Math.abs(event.touches[0].clientX - event.touches[1].clientX) - originFingerWidth)) + 'px';
         }
     }, false);
