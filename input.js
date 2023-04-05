@@ -156,7 +156,7 @@ grayPart.addEventListener("touchstart",
             if (secondTouchTime - firstTouchTime <= 100) {
                 console.log('two-finger touched');
                 let selectedDiv = document.getElementsByClassName('selected')[0];
-                originDivWidth = selectedDiv.style.width.replace("px", "");
+                originDivWidth = parseInt(selectedDiv.style.width.replace("px", ""));
                 originLeft = selectedDiv.style.offsetLeft;
                 if (selectedDiv !== undefined) {
                     originFingerWidth = Math.abs(e.touches[0].clientX - e.touches[1].clientX);
@@ -228,7 +228,7 @@ grayPart.addEventListener('touchmove',
                 '\nm e.touches[1].clientX: ' + event.touches[1].clientX);
             let fingerOffset = Math.abs(event.touches[0].clientX - event.touches[1].clientX);
             console.log("fingerOffset: " + fingerOffset);
-            console.log('new w: ' + (originDivWidth + (Math.abs(event.touches[0].clientX - event.touches[1].clientX) - originFingerWidth)));
+            console.log('new w: ' + (originDivWidth + fingerOffset - originFingerWidth));
             //  selectedDiv.style.left = (originLeft - (originDivWidth + (Math.abs(event.touches[0].clientX - event.touches[1].clientX) - originFingerWidth)) / 2) + 'px';
             selectedDiv.style.width = (originDivWidth + (Math.abs(event.touches[0].clientX - event.touches[1].clientX) - originFingerWidth)) + 'px';
         }
