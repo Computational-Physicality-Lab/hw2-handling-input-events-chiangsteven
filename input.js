@@ -16,9 +16,11 @@ var offset = [0, 0];
 var isDown = false;
 var isFollowMode = false;
 var isFollowModeEnd = false;
+var isChangingSize = false;
 var movingDiv;
 var firstTouchTime;
 var secondTouchTime;
+var originFingerWidth;
 
 function removeClassName(cn) {
     for (let i = 0; i < allTarget.length; i++) {
@@ -149,8 +151,13 @@ grayPart.addEventListener("touchstart",
             secondTouchTime = e.timeStamp;
             console.log('1st: ' + firstTouchTime);
             console.log('2nd: ' + secondTouchTime);
-            if (secondTouchTime - firstTouchTime <= 200) {
+            if (secondTouchTime - firstTouchTime <= 100) {
                 console.log('two-finger touched');
+                let selectedDiv = document.getElementsByClassName('selected')[0];
+                if (selectedDiv !== undefined) {
+                    originFingerWidth = Math.abs(e.touches[0].clientX - e.touches[1].clientX);
+                    isChangingSize = true;
+                }
             }
             else {
                 console.log('abort');
@@ -163,13 +170,22 @@ grayPart.addEventListener("touchstart",
             }
 
         }
+        else {
+            console.log('abort');
+            if (movingDiv !== undefined) {
+                movingDiv.style.left = (originPosition.x + offset[0]) + 'px';
+                movingDiv.style.top = (originPosition.y + offset[1]) + 'px';
+            }
+            isDown = false;
+            movingDiv = undefined;
+        }
         console.log("gray touch start");
     }, false);
 
 
 grayPart.addEventListener('touchend',
-    function () {
-        console.log("gray touch end" + " " + isFollowMode);
+    function (e) {
+        console.log("gray touch end, touches count:" + " " + e.touches.length);
         if (isFollowMode) {
             console.log("isFollowMode in gray touch end");
         }
@@ -193,5 +209,9 @@ grayPart.addEventListener('touchmove',
             };
             movingDiv.style.left = (mousePosition.x + offset[0]) + 'px';
             movingDiv.style.top = (mousePosition.y + offset[1]) + 'px';
+        }
+        if (isChangingSize) {
+            let selectedDiv = document.getElementsByClassName('selected')[0];
+            selectedDiv.style.width *= (Math.abs(e.touches[0].clientX - e.touches[1].clientX) - originFingerWidth) / originFingerWidth;
         }
     }, false);
