@@ -23,6 +23,7 @@ var secondTouchTime;
 var originFingerWidth;
 var originDivWidth;
 var originLeft;
+const minWidth = 50;
 
 function removeClassName(cn) {
     for (let i = 0; i < allTarget.length; i++) {
@@ -230,6 +231,6 @@ grayPart.addEventListener('touchmove',
             console.log("new l: " + (originLeft - (originDivWidth + fingerOffset - originFingerWidth) / 2));
             console.log('new w: ' + (originDivWidth + fingerOffset - originFingerWidth));
             selectedDiv.style.left = (originLeft - (originDivWidth + fingerOffset - originFingerWidth) / 2) + 'px';
-            selectedDiv.style.width = ((originDivWidth + fingerOffset - originFingerWidth)) + 'px';
+            selectedDiv.style.width = Math.min(minWidth, ((originDivWidth + fingerOffset - originFingerWidth))) + 'px';
         }
     }, false);
