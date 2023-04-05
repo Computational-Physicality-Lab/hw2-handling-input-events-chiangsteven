@@ -86,6 +86,10 @@ for (let i = 0; i < allTarget.length; i++) {
         isDown = true;
         isFollowMode = true;
         movingDiv = this;
+        originPosition = {
+            x: e.clientX,
+            y: e.clientY
+        };
     }, false);
     div.addEventListener('touchstart', function (e) {
         console.log("div touch start");
@@ -162,7 +166,7 @@ document.addEventListener("keyup", (e) => {
 grayPart.addEventListener("touchstart",
     (e) => {
         if (!isWaitingAllFingersLeave) {
-            if (e.touches.length === 1) {
+            if (e.touches.length === 1 && !isFollowMode) {
                 originPosition = {
                     x: e.touches[0].clientX,
                     y: e.touches[0].clientY
