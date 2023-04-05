@@ -162,7 +162,7 @@ grayPart.addEventListener("touchstart",
                     originFingerWidth = Math.abs(e.touches[0].clientX - e.touches[1].clientX);
                     isChangingSize = true;
                     console.log('originFingerWidth: ' + originFingerWidth);
-                    console.log('originDivWidth: ' + originDivWidth);
+                    console.log('originLeft: ' + originLeft);
                     console.log('e.touches[0].clientX: ' + e.touches[0].clientX +
                         '\ne.touches[1].clientX: ' + e.touches[1].clientX);
                 }
@@ -227,7 +227,7 @@ grayPart.addEventListener('touchmove',
             console.log('m e.touches[0].clientX: ' + event.touches[0].clientX +
                 '\nm e.touches[1].clientX: ' + event.touches[1].clientX);
             let fingerOffset = Math.abs(event.touches[0].clientX - event.touches[1].clientX);
-            console.log("fingerOffset: " + fingerOffset);
+            console.log("new l: " + (originLeft - (originDivWidth + fingerOffset - originFingerWidth) / 2));
             console.log('new w: ' + (originDivWidth + fingerOffset - originFingerWidth));
             selectedDiv.style.left = (originLeft - (originDivWidth + fingerOffset - originFingerWidth) / 2) + 'px';
             selectedDiv.style.width = ((originDivWidth + fingerOffset - originFingerWidth)) + 'px';
