@@ -17,6 +17,8 @@ var isDown = false;
 var isFollowMode = false;
 var isFollowModeEnd = false;
 var movingDiv;
+var firstTouch;
+var secondTouch;
 
 function removeClassName(cn) {
     for (let i = 0; i < allTarget.length; i++) {
@@ -140,12 +142,21 @@ grayPart.addEventListener("touchstart",
                 x: e.touches[0].clientX,
                 y: e.touches[0].clientY
             };
+            firstTouch = e.touches[0];
         }
-        else {
-            movingDiv.style.left = (originPosition.x + offset[0]) + 'px';
-            movingDiv.style.top = (originPosition.y + offset[1]) + 'px';
-            isDown = false;
-            movingDiv = undefined;
+        else if (e.touches.length === 2) {
+            secondTouch = e.touches[1];
+            if (secondTouch.timeStamp - firstTouch.timeStamp <= 200) {
+                console.log('two-finger touched');
+            }
+            else {
+                console.log('abort');
+                movingDiv.style.left = (originPosition.x + offset[0]) + 'px';
+                movingDiv.style.top = (originPosition.y + offset[1]) + 'px';
+                isDown = false;
+                movingDiv = undefined;
+            }
+
         }
         console.log("gray touch start");
     }, false);
