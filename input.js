@@ -217,7 +217,7 @@ grayPart.addEventListener('touchmove',
     function (event) {
         event.preventDefault();
         console.log("touch mmm");
-        if ((e.touches.length === 1) && isDown) {
+        if ((event.touches.length === 1) && isDown) {
             mousePosition = {
 
                 x: event.touches[0].clientX,
