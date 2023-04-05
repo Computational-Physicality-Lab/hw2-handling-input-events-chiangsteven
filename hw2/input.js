@@ -42,7 +42,7 @@ grayPart.addEventListener("click",
         if (originPosition.x === e.clientX && isFollowModeEnd === false) {
             removeClassName("selected");
         }
-        console.log("gray");
+        console.log("gray click");
     }, true);
 
 for (let i = 0; i < allTarget.length; i++) {
@@ -57,7 +57,7 @@ for (let i = 0; i < allTarget.length; i++) {
             if (isFollowModeEnd === true) {
                 isFollowModeEnd = false;
             }
-            console.log("click");
+            console.log("target click");
         }, true
     );
     div.addEventListener('mousedown', function (e) {
@@ -86,10 +86,12 @@ for (let i = 0; i < allTarget.length; i++) {
         isDown = true;
         isFollowMode = true;
         movingDiv = this;
+
         originPosition = {
             x: e.clientX,
             y: e.clientY
         };
+        console.log(originPosition);
     }, false);
     div.addEventListener('touchstart', function (e) {
         console.log("div touch start");
