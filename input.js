@@ -6,3 +6,117 @@ to handle mouse, touch and possible other events.
 You will certainly need a large number of global variables to keep track of the current modes and states
 of the interaction.
 */
+const allTarget = document.querySelectorAll(".target");
+const grayPart = document.querySelector("#workspace");
+//var selectedDiv;
+var mousePosition;
+var mouseUpPosition;
+var originPosition;
+var offset = [0, 0];
+var isDown = false;
+var isFollowMode = false;
+var isFollowModeEnd = false;
+var movingDiv;
+
+function removeClassName(cn) {
+    for (let i = 0; i < allTarget.length; i++) {
+        let div = allTarget[i];
+        div.classList.remove(cn);
+    }
+}
+
+grayPart.addEventListener("click",
+    (e) => {
+        if (originPosition.x === e.clientX && isFollowModeEnd === false) {
+            removeClassName("selected");
+        }
+        console.log("gray");
+    }, true);
+
+for (let i = 0; i < allTarget.length; i++) {
+    let div = allTarget[i];
+    div.addEventListener(
+        "click", function (e) {
+            if (originPosition.x === e.clientX && isFollowModeEnd === false) {
+                removeClassName("selected");
+                console.log("click in rm and select" + i);
+                this.classList.add("selected");
+            }
+            if (isFollowModeEnd === true) {
+                isFollowModeEnd = false;
+            }
+            console.log("click");
+        }, true
+    );
+    div.addEventListener('mousedown', function (e) {
+        console.log("div mouse down");
+        isDown = true;
+        offset = [
+            div.offsetLeft - e.clientX,
+            div.offsetTop - e.clientY
+        ];
+        originPosition = {
+            x: e.clientX,
+            y: e.clientY
+        };
+        movingDiv = this;
+    }, false);
+    div.addEventListener('mouseup', () => {
+        console.log("div mouse up");
+        if (isFollowMode) {
+            isFollowModeEnd = true;
+            isFollowMode = false;
+            console.log("div mouse up set True");
+        }
+    }, false);
+    div.addEventListener('dblclick', function () {
+        console.log("double click");
+        isDown = true;
+        isFollowMode = true;
+        movingDiv = this;
+    }, false);
+
+}
+
+grayPart.addEventListener("mousedown",
+    (e) => {
+        originPosition = {
+            x: e.clientX,
+            y: e.clientY
+        };
+        console.log("gray mosue down");
+    }, false);
+
+
+grayPart.addEventListener('mouseup',
+    function () {
+        console.log("gray mouse up");
+        isDown = false;
+        movingDiv = undefined;
+    }, false);
+
+grayPart.addEventListener('mousemove',
+    function (event) {
+        event.preventDefault();
+        console.log("mouse mmm");
+        if (isDown) {
+            mousePosition = {
+
+                x: event.clientX,
+                y: event.clientY
+
+            };
+            movingDiv.style.left = (mousePosition.x + offset[0]) + 'px';
+            movingDiv.style.top = (mousePosition.y + offset[1]) + 'px';
+        }
+    }, false);
+
+document.addEventListener("keyup", (e) => {
+    if (e.code === "Escape" && isDown) {
+        movingDiv.style.left = (originPosition.x + offset[0]) + 'px';
+        movingDiv.style.top = (originPosition.y + offset[1]) + 'px';
+        isDown = false;
+        movingDiv = undefined;
+    }
+    console.log("esc");
+}, false)

@@ -26,3 +26,7 @@ body {
   background-color: red;
   box-sizing: border-box;
 }
+
+.selected {
+  background-color: #00f;
+}
