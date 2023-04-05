@@ -135,11 +135,18 @@ document.addEventListener("keyup", (e) => {
 
 grayPart.addEventListener("touchstart",
     (e) => {
-        if (e.touches.length === 1)
+        if (e.touches.length === 1) {
             originPosition = {
                 x: e.touches[0].clientX,
                 y: e.touches[0].clientY
             };
+        }
+        else {
+            movingDiv.style.left = (originPosition.x + offset[0]) + 'px';
+            movingDiv.style.top = (originPosition.y + offset[1]) + 'px';
+            isDown = false;
+            movingDiv = undefined;
+        }
         console.log("gray touch start");
     }, false);
 
